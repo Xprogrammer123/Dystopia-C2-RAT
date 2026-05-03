@@ -64,3 +64,4 @@ Contributions are welcome to our GitHub repo! We value community involvement and
 
 ## Disclaimer
 This github repository is made for educational purposes only. The developer is not responsible for any misuse of this software. **Do not use this software for illegal purposes.**
+# Dystopia-C2-RAT
